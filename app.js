@@ -20,14 +20,14 @@ var monthlyRate = "";
 var totalBilled = "";
 
 // Capture Button Click
-$("#submit").on("click", function (event) {
+$(document).on("click", "#submit", function (event) {
     event.preventDefault();
 
     // Grabbed values from text boxes
-    name = $("#employee-name").val().trim();
-    role = $("#role").val().trim();
-    startDate = $("#date").val().trim();
-    monthlyRate = $("#monthly-rate").val().trim();
+    name = $("#employee-name-input").val().trim();
+    role = $("#role-input").val().trim();
+    startDate = $("#date-input").val().trim();
+    monthlyRate = $("#monthly-rate-input").val().trim();
 
     console.log(startDate)
     console.log(role)
@@ -44,4 +44,44 @@ $("#submit").on("click", function (event) {
         dateAdded: firebase.database.ServerValue.TIMESTAMP
     });
 
+});
+
+database.ref().on("child_added", function (snapshot) {
+    var sv = snapshot.val()
+    // Log everything that's coming out of snapshot
+    console.log(snapshot.val());
+    console.log(snapshot.val().name);
+    console.log(snapshot.val().role);
+    console.log(snapshot.val().startDate);
+    console.log(snapshot.val().monthlyRate);
+
+    // Change the HTML to reflect
+    $("#employee-name").text(sv.name);
+    $("#role").text(sv.role);
+    $("#date").text(sv.startDate);
+    $("#months-worked").text(sv.monthlyRate);
+    $("#monthly-rate").text(sv.monthsWorked);
+    $("#total-billed").text(sv.totalBilled);
+
+    var tBody = $("tbody");
+    var tRow = $("<tr>");
+    var titleTd = $("<td>").text(name);
+    var roleTd = $("<td>").text(role);
+    var startTd = $("<td>").text(startDate);
+    var monthTd = $("<td>").text(monthlyRate);
+
+    tRow.append(titleTd, roleTd, startTd, monthTd);
+    tBody.append(tRow);
+
+
+    // var tableRow = $("<tr>")
+    // var tableHeaderCell = $("<th>")
+    // var tableD = $("<td>")
+    // $("tableGoesHere").append(tableRow)
+    // tableRow.append(tableHeaderCell)
+    // tableHeaderCell.append(tableD + name)
+    // tableHeaderCell
+    // Handle the errors
+}, function (errorObject) {
+    console.log("Errors handled: " + errorObject.code);
 });
